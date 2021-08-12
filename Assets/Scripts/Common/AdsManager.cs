@@ -1,0 +1,86 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
+using GoogleMobileAds.Api;
+
+public class AdsManager : MonoBehaviour {
+
+    private string android_banner_id = "ca-app-pub-2753250927308652/8001950626";
+    public string ios_banner_id;
+
+    public string android_interstitial_id;
+    public string ios_interstitial_id;
+
+    private BannerView bannerView;
+    private InterstitialAd interstitialAd;
+
+    public void Start()
+    {
+        RequestBannerAd();
+        RequestInterstitialAd();
+
+        ShowBannerAd();
+    }
+
+    public void RequestBannerAd()
+    {
+        string adUnitId = string.Empty;
+
+#if UNITY_ANDROID
+        adUnitId = android_banner_id;
+#elif UNITY_IOS
+        adUnitId = ios_bannerAdUnitId;
+#endif
+
+        bannerView = new BannerView(adUnitId, AdSize.SmartBanner, AdPosition.Top);
+        AdRequest request = new AdRequest.Builder().Build();
+
+        bannerView.LoadAd(request);
+    }
+
+    private void RequestInterstitialAd()
+    {
+        string adUnitId = string.Empty;
+
+#if UNITY_ANDROID
+        adUnitId = android_interstitial_id;
+#elif UNITY_IOS
+        adUnitId = ios_interstitialAdUnitId;
+#endif
+
+        interstitialAd = new InterstitialAd(adUnitId);
+        AdRequest request = new AdRequest.Builder().Build();
+
+        interstitialAd.LoadAd(request);
+
+        interstitialAd.OnAdClosed += HandleOnInterstitialAdClosed;
+    }
+
+    public void HandleOnInterstitialAdClosed(object sender, EventArgs args)
+    {
+        print("HandleOnInterstitialAdClosed event received.");
+
+        interstitialAd.Destroy();
+
+        RequestInterstitialAd();
+    }
+
+    public void ShowBannerAd()
+    {
+        bannerView.Show();
+    }
+
+    public void ShowInterstitialAd()
+    {
+        if (!interstitialAd.IsLoaded())
+        {
+            RequestInterstitialAd();
+            return;
+        }
+
+        interstitialAd.Show();
+    }
+
+    
+}

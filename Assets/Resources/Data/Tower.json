@@ -1,0 +1,179 @@
+{
+	"Common" : 
+	{
+		"AttackPoint" : 1,
+		"AttackSpeed" : 1,
+		"AttackRange" : 3,
+		"Socket" : 1,
+		"Cost" : 10
+	},
+	"MeleeLv1" : 
+	{
+		"AttackPoint" : 1,
+		"AttackSpeed" : 0.8,
+		"AttackRange" : 1,
+		"Socket" : 2,
+		"Cost" : 50
+	},
+	"MeleeLv2" : 
+	{
+		"AttackPoint" : 3,
+		"AttackSpeed" : 0.8,
+		"AttackRange" : 1,
+		"Socket" : 3,
+		"Cost" : 120
+	},
+	"MeleeLv3" : 
+	{
+		"AttackPoint" : 5,
+		"AttackSpeed" : 0.8,
+		"AttackRange" : 1,
+		"Socket" : 4,
+		"Cost" : 200
+	},
+	"Weapon" : 
+	{
+		"AttackPoint" : 3.0,
+		"AttackSpeed" : 0.5,
+		"AttackRange" : 1,
+		"Socket" : 2,
+		"Cost" : 120
+	},
+	"Fighter" : 
+	{
+		"AttackPoint" : 1.0,
+		"AttackSpeed" : 0.2,
+		"AttackRange" : 1,
+		"Socket" : 3,
+		"Cost" : 200
+	},
+	"Swordman" : 
+	{
+		"AttackPoint" : 10.0,
+		"AttackSpeed" : 1.5,
+		"AttackRange" : 1,
+		"Socket" : 3,
+		"Cost" : 200
+	},
+	"Hammer" : 
+	{
+		"AttackPoint" : 5.0
+		"AttackSpeed" : 2.0,
+		"AttackRange" : 3,
+		"Socket" : 3,
+		"Cost" : 200
+	},
+	"ArrowLv1" : 
+	{
+		"AttackPoint" : 1.0,
+		"AttackSpeed" : 0.75,
+		"AttackRange" : 5,
+		"Socket" : 2,
+		"Cost" : 50
+	},
+	"ArrowLv2" : 
+	{
+		"AttackPoint" : 2.0,
+		"AttackSpeed" : 0.75,
+		"AttackRange" : 5,
+		"Socket" : 3,
+		"Cost" : 120
+	},
+	"ArrowLv3" : 
+	{
+		"AttackPoint" : 3.0,
+		"AttackSpeed" : 0.75,
+		"AttackRange" : 5,
+		"Socket" : 4,
+		"Cost" : 200
+	},
+	"Archer" : 
+	{
+		"AttackPoint" : 4.0,
+		"AttackSpeed" : 0.75,
+		"AttackRange" : 5,
+		"Socket" : 2,
+		"Cost" : 120
+	},
+	"Sniper" : 
+	{
+		"AttackPoint" : 10.0,
+		"AttackSpeed" : 2.5,
+		"AttackRange" : 8,
+		"Socket" : 3,
+		"Cost" : 200
+	},
+	"Machinegun" : 
+	{
+		"AttackPoint" : 0.5,
+		"AttackSpeed" : 0.2,
+		"AttackRange" : 3,
+		"Socket" : 3,
+		"Cost" : 200
+	},
+	"Ranger" : 
+	{
+		"AttackPoint" : 3.0,
+		"AttackSpeed" : 1.0,
+		"AttackRange" : 3,
+		"Socket" : 3,
+		"Cost" : 200
+	},
+	"MagicLv1" : 
+	{
+		"AttackPoint" : 2.0,
+		"AttackSpeed" : 2,
+		"AttackRange" : 4,
+		"Socket" : 2,
+		"Cost" : 50
+	},
+	"MagicLv2" : 
+	{
+		"AttackPoint" : 4.0,
+		"AttackSpeed" : 2,
+		"AttackRange" : 4,
+		"Socket" : 3,
+		"Cost" : 120
+	},
+	"MagicLv3" : 
+	{
+		"AttackPoint" : 6.0,
+		"AttackSpeed" : 2,
+		"AttackRange" : 4,
+		"Socket" : 4,
+		"Cost" : 200
+	},
+	"Wizard" : 
+	{
+		"AttackPoint" : 3.0,
+		"AttackSpeed" : 1.0,
+		"AttackRange" : 4,
+		"Socket" : 2,
+		"Cost" : 120
+	},
+	"Nature" : 
+	{
+		"AttackPoint" : 5.0,
+		"AttackSpeed" : 1.5,
+		"AttackRange" : 4,
+		"Socket" : 3,
+		"Cost" : 200
+	},
+	"Elemental" : 
+	{
+		"AttackPoint" : 3.0,
+		"AttackSpeed" : 1.0,
+		"AttackRange" : 3,
+		"Socket" : 3,
+		"Cost" : 200
+	},
+	"Aura" : 
+	{
+		"AttackPoint" : 1.0,
+		"AttackSpeed" : 1.0,
+		"AttackRange" : 5,
+		"Socket" : 3,
+		"Cost" : 200
+	}	
+		
+}
