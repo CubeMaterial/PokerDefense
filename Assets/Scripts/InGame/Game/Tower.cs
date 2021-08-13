@@ -5,39 +5,28 @@ using UnityEngine.UI;
 public class Tower : MonoBehaviour
 {
     private int m_iTowerIndex;
-    private Image m_TowerBase;
+    public Image[] m_CardImage;
+    public Text m_CardName;
     public Image m_TowerSprite;
     public Transform FirePoint;
 
     public Enemy Target;
 
-    private int TargetCount;
-    private float AttackPoint;
-    private float AttackSpeed;
-    private float Range;
-
-    private int MaxTargetCount;
-
+    private TowerBase m_TowerBase;
     private string TowerLevel;
 
-    private float Accurate;
-    private float CriticalRate;
-    private float CriticalValue;
-
-    private bool IsAttackSuccess;
-    
 
     private string isLock = "L";
     private bool isAttack = false;
     private void Awake()
     {
         m_iTowerIndex = int.Parse(gameObject.name.Split('_')[1]); 
-        m_TowerBase = GetComponent<Image>();
-        TargetCount = 0;
+        //m_TowerBase.Accurate
+        // TargetCount = 0;
         TowerLevel = "None";
-        Accurate = 100;
-        CriticalRate = 0;
-        CriticalValue = 1.5f;
+        // Accurate = 100;
+        // CriticalRate = 0;
+        // CriticalValue = 1.5f;
     }
 
     private void Update()
@@ -63,7 +52,7 @@ public class Tower : MonoBehaviour
 
         }*/
 
-        yield return new WaitForSeconds(AttackSpeed);
+        yield return new WaitForSeconds(m_TowerBase.m_fAttackSpeed);
 
         if (Target != null)
         {
