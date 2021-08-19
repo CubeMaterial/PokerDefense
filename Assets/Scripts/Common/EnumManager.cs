@@ -106,7 +106,17 @@ public enum EnemyMoveState
     AtPoint6 = 6,
     AtPoint7 = 7,
     AtPoint8 = 8,
-    AtPoint9 = 9
+    AtPoint9 = 9,
+    AtPoint10 = 10,
+    AtPoint11 = 11,
+    AtPoint12 = 12,
+    AtPoint13 = 13,
+    AtPoint14 = 14,
+    AtPoint15 = 15,
+    AtPoint16 = 16,
+    AtPoint17 = 17,
+    AtPoint18 = 18,
+    AtPoint19 = 19
 }
 
 

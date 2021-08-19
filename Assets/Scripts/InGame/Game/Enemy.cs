@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Enemy : MonoBehaviour 
@@ -15,7 +16,7 @@ public class Enemy : MonoBehaviour
 
     private int[] mDebuffLevel;
 
-    public UISprite m_EnemySprite;
+    public Image m_EnemySprite;
 
     public Transform GoalPosition;
     public GameObject EnemyCore;
@@ -28,7 +29,7 @@ public class Enemy : MonoBehaviour
     {
         mDebuffLevel = new int[(int)EnemyDebuff.End];
         mEnemyStatus = new float[(int)Enemy_Status.End, (int)Status_State.End]; 
-        Respawn();
+        // Respawn();
     }
 
     public void Init(CardShape shape, CardLevel level)
@@ -37,7 +38,7 @@ public class Enemy : MonoBehaviour
         mCardLevel = level;
 
 
-
+        SetParameter();
         m_EnemyState = EnemyState.Ready;
         m_EnemyMoveState = EnemyMoveState.AtPoint0;
 
@@ -53,7 +54,7 @@ public class Enemy : MonoBehaviour
         ((int)mCardLevel + 2) * GameDataManager.instance.ReturnCurrentLevel();
 
         mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Origin] =
-        mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current] = 1f;
+        mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current] = 5f;
 
         mEnemyStatus[(int)Enemy_Status.AvoidRate, (int)Status_State.Origin] =
         mEnemyStatus[(int)Enemy_Status.AvoidRate, (int)Status_State.Current] = 5f;
@@ -118,16 +119,16 @@ public class Enemy : MonoBehaviour
 
     }
 
-    private void Update()
-    {
-        if (m_EnemyState == EnemyState.Move)
-        {
-            if (gameObject.transform.localPosition == GoalPosition.localPosition)
-            {
-                GoalPositionCheck();
-            }
-        }
-    }
+    // private void Update()
+    // {
+    //     if (m_EnemyState == EnemyState.Move)
+    //     {
+    //         if (gameObject.transform.localPosition == GoalPosition.localPosition)
+    //         {
+    //             GoalPositionCheck();
+    //         }
+    //     }
+    // }
 
     IEnumerator Move()
     {
@@ -136,29 +137,98 @@ public class Enemy : MonoBehaviour
             if (Vector3.Distance(gameObject.transform.localPosition, GoalPosition.localPosition) < mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current])
             {
                 gameObject.transform.localPosition = GoalPosition.localPosition;
+                GoalPositionCheck();
             }
             else
             {
-                if (m_EnemyMoveState == EnemyMoveState.AtPoint1 || m_EnemyMoveState == EnemyMoveState.AtPoint5 || m_EnemyMoveState == EnemyMoveState.AtPoint7)
-                {
-                    // down
-                    gameObject.transform.localPosition = new Vector2(gameObject.transform.localPosition.x, gameObject.transform.localPosition.y - mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
-                }
-                else if (m_EnemyMoveState == EnemyMoveState.AtPoint3 || m_EnemyMoveState == EnemyMoveState.AtPoint9)
-                {
-                    // up
-                    gameObject.transform.localPosition = new Vector2(gameObject.transform.localPosition.x, gameObject.transform.localPosition.y + mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
-                }
-                else if (m_EnemyMoveState == EnemyMoveState.AtPoint2 || m_EnemyMoveState == EnemyMoveState.AtPoint4 || m_EnemyMoveState == EnemyMoveState.AtPoint8)
-                {
-                    // right
-                    gameObject.transform.localPosition = new Vector2(gameObject.transform.localPosition.x + mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current], gameObject.transform.localPosition.y);
-                }
-                else if (m_EnemyMoveState == EnemyMoveState.AtPoint6 || m_EnemyMoveState == EnemyMoveState.AtPoint0)
-                {
-                    // left
-                    gameObject.transform.localPosition = new Vector2(gameObject.transform.localPosition.x - mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current], gameObject.transform.localPosition.y);
-                }
+                //print("speed : "+ mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
+
+                // if(Mathf.Abs(gameObject.transform.localPosition.x - GoalPosition.transform.localPosition.x) > mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current])
+                // {
+                //     if( gameObject.transform.localPosition.x > GoalPosition.transform.localPosition.x)
+                //     {
+                //         print("left");
+                //         transform.Translate(-Vector3.right * Time.deltaTime * mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
+                //     }
+                //     // 목표가 우측에 있을때
+                //     else if(gameObject.transform.localPosition.x < GoalPosition.transform.localPosition.x)
+                //     {
+                //         print("right");
+                //         transform.Translate(Vector3.right * Time.deltaTime * mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
+                //     }
+                // }
+                // else if(Mathf.Abs(gameObject.transform.localPosition.y - GoalPosition.transform.localPosition.y) > mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current])
+                // {
+                //     if(gameObject.transform.localPosition.y > GoalPosition.transform.localPosition.y)
+                //     {
+                //         print("down");
+                //         transform.Translate(-Vector3.up * Time.deltaTime * mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
+                //     }
+                //     // 목표가 위에 있을때
+                //     else if(gameObject.transform.localPosition.y < GoalPosition.transform.localPosition.y)
+                //     {
+                //         print("up");
+                //         transform.Translate(Vector3.up * Time.deltaTime * mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
+                //     }
+                // }
+                // else
+                // {
+                //     print("none");
+                // }
+                // gameObject.transform.localPosition = Vector3.Lerp(gameObject.transform.localPosition, GoalPosition.localPosition,0.5f* Time.deltaTime);
+                gameObject.transform.position = Vector3.MoveTowards(transform.position, GoalPosition.position, mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current] * Time.deltaTime);
+
+
+                // 목표가 좌측에 있을때
+                // if( gameObject.transform.localPosition.x > GoalPosition.transform.localPosition.x)
+                // {
+                //     print("left");
+                //     transform.Translate(-Vector3.right * Time.deltaTime * mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
+                // }
+                // // 목표가 우측에 있을때
+                // else if(gameObject.transform.localPosition.x < GoalPosition.transform.localPosition.x)
+                // {
+                //     print("right");
+                //     transform.Translate(Vector3.right * Time.deltaTime * mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
+                // }
+                // // 목표가 아래에 있을때
+                // else if(gameObject.transform.localPosition.y > GoalPosition.transform.localPosition.y)
+                // {
+                //     print("down");
+                //     transform.Translate(-Vector3.up * Time.deltaTime * mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
+                // }
+                // // 목표가 위에 있을때
+                // else if(gameObject.transform.localPosition.y < GoalPosition.transform.localPosition.y)
+                // {
+                //     print("up");
+                //     transform.Translate(Vector3.up * Time.deltaTime * mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
+                // }
+                // else
+                // {
+                //     print("none");
+                // }
+
+                // gameObject.transform.localPosition = Vector3.Lerp(gameObject.transform.localPosition, GoalPosition.localPosition,Time.deltaTime);
+                // if (m_EnemyMoveState == EnemyMoveState.AtPoint1 || m_EnemyMoveState == EnemyMoveState.AtPoint5 || m_EnemyMoveState == EnemyMoveState.AtPoint7)
+                // {
+                //     // down
+                //     gameObject.transform.localPosition = new Vector2(gameObject.transform.localPosition.x, gameObject.transform.localPosition.y - mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
+                // }
+                // else if (m_EnemyMoveState == EnemyMoveState.AtPoint3 || m_EnemyMoveState == EnemyMoveState.AtPoint9)
+                // {
+                //     // up
+                //     gameObject.transform.localPosition = new Vector2(gameObject.transform.localPosition.x, gameObject.transform.localPosition.y + mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
+                // }
+                // else if (m_EnemyMoveState == EnemyMoveState.AtPoint2 || m_EnemyMoveState == EnemyMoveState.AtPoint4 || m_EnemyMoveState == EnemyMoveState.AtPoint8)
+                // {
+                //     // right
+                //     gameObject.transform.localPosition = new Vector2(gameObject.transform.localPosition.x + mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current], gameObject.transform.localPosition.y);
+                // }
+                // else if (m_EnemyMoveState == EnemyMoveState.AtPoint6 || m_EnemyMoveState == EnemyMoveState.AtPoint0)
+                // {
+                //     // left
+                //     gameObject.transform.localPosition = new Vector2(gameObject.transform.localPosition.x - mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current], gameObject.transform.localPosition.y);
+                // }
             }
             yield return new WaitForEndOfFrame();
         }
@@ -205,6 +275,46 @@ public class Enemy : MonoBehaviour
                 GoalPosition = GameManager.instance.MovePoint[9];
                 break;
             case EnemyMoveState.AtPoint9:
+                m_EnemyMoveState = EnemyMoveState.AtPoint10;
+                GoalPosition = GameManager.instance.MovePoint[10];
+                break;
+                case EnemyMoveState.AtPoint10:
+                m_EnemyMoveState = EnemyMoveState.AtPoint11;
+                GoalPosition = GameManager.instance.MovePoint[11];
+                break;
+            case EnemyMoveState.AtPoint11:
+                m_EnemyMoveState = EnemyMoveState.AtPoint12;
+                GoalPosition = GameManager.instance.MovePoint[12];
+                break;
+            case EnemyMoveState.AtPoint12:
+                m_EnemyMoveState = EnemyMoveState.AtPoint13;
+                GoalPosition = GameManager.instance.MovePoint[13];
+                break;
+            case EnemyMoveState.AtPoint13:
+                m_EnemyMoveState = EnemyMoveState.AtPoint14;
+                GoalPosition = GameManager.instance.MovePoint[14];
+                break;
+            case EnemyMoveState.AtPoint14:
+                m_EnemyMoveState = EnemyMoveState.AtPoint15;
+                GoalPosition = GameManager.instance.MovePoint[15];
+                break;
+            case EnemyMoveState.AtPoint15:
+                m_EnemyMoveState = EnemyMoveState.AtPoint16;
+                GoalPosition = GameManager.instance.MovePoint[16];
+                break;
+            case EnemyMoveState.AtPoint16:
+                m_EnemyMoveState = EnemyMoveState.AtPoint17;
+                GoalPosition = GameManager.instance.MovePoint[17];
+                break;
+            case EnemyMoveState.AtPoint17:
+                m_EnemyMoveState = EnemyMoveState.AtPoint18;
+                GoalPosition = GameManager.instance.MovePoint[18];
+                break;
+            case EnemyMoveState.AtPoint18:
+                m_EnemyMoveState = EnemyMoveState.AtPoint19;
+                GoalPosition = GameManager.instance.MovePoint[19];
+                break;
+            case EnemyMoveState.AtPoint19:
                 m_EnemyMoveState = EnemyMoveState.AtPoint0;
                 GoalPosition = GameManager.instance.MovePoint[0];
                 break;

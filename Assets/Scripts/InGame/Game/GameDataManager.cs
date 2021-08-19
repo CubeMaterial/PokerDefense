@@ -49,6 +49,13 @@ public class GameDataManager : Singleton<GameDataManager>
         iStageLevel = 0;
     }
 
+    public void ChangeValueStageLevel(int i)
+    {
+        iStageLevel = i;
+    }
+
+ 
+
     public int ReturnCurrentLevel()
     {
         return iStageLevel;

@@ -50,6 +50,13 @@ public class GameManager : Singleton<GameManager>
         iCurrentGold = 100;
     }
 
+    private IEnumerator  Start() 
+    {
+        yield return new WaitForSeconds(1f);
+
+        PressStartBtn();    
+    }
+
     public void Restart()
     {
         GameDataManager.instance.Restart();
@@ -140,8 +147,8 @@ public class GameManager : Singleton<GameManager>
 
     public void WaveStart()
     {
-        //GameDataManager.instance.ChangeValueStageLevel(1);
-        //EnemyManager.instance.SummonEnemy(GameDataManager.instance.ReturnValueStageLevel());
+        GameDataManager.instance.ChangeValueStageLevel(1);
+        EnemyManager.instance.SummonEnemy(GameDataManager.instance.ReturnCurrentLevel());
     }
 
     public bool GetGameProcessing()

@@ -45,9 +45,9 @@ public class SubDealer : MonoBehaviour
         }
         else
         {
-            if (EnemyManager.instance.mEnemyList.Count > 0)
+            if (EnemyManager.instance.m_EnemyList.Count > 0)
             {
-                mTarget = EnemyManager.instance.mEnemyList[0];
+                mTarget = EnemyManager.instance.m_EnemyList[0];
             }
             else
             {

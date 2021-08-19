@@ -40,46 +40,47 @@ namespace UniRx.Async
     {
         static PlayerLoopRunner[] runners;
 
-        static UnityEngine.LowLevel.PlayerLoopSystem[] InsertRunner(Type type, UnityEngine.LowLevel.PlayerLoopSystem loopSystem, PlayerLoopRunner runner)
-        {
-            var runnerLoop = new UnityEngine.LowLevel.PlayerLoopSystem
-            {
-                type = type,
-                updateDelegate = runner.Run
-            };
+        // static UnityEngine.LowLevel.PlayerLoopSystem[] InsertRunner(Type type, UnityEngine.LowLevel.PlayerLoopSystem loopSystem, PlayerLoopRunner runner)
+        // {
+        //     var runnerLoop = new UnityEngine.LowLevel.PlayerLoopSystem
+        //     {
+        //         type = type,
+        //         updateDelegate = runner.Run
+        //     };
 
-            var dest = new UnityEngine.LowLevel.PlayerLoopSystem[loopSystem.subSystemList.Length + 1];
-            Array.Copy(loopSystem.subSystemList, 0, dest, 1, loopSystem.subSystemList.Length);
-            dest[0] = runnerLoop;
-            return dest;
-        }
+        //     var dest = new UnityEngine.LowLevel.PlayerLoopSystem[loopSystem.subSystemList.Length + 1];
+        //     Array.Copy(loopSystem.subSystemList, 0, dest, 1, loopSystem.subSystemList.Length);
+        //     dest[0] = runnerLoop;
+        //     return dest;
+        // }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Init()
         {
             if (runners != null) return; // already initialized
 
-            var playerLoop = UnityEngine.LowLevel.PlayerLoop.GetDefaultPlayerLoop();
-            Initialize(ref playerLoop);
+            // var playerLoop = UnityEngine.LowLevel.PlayerLoop.GetDefaultPlayerLoop();
+            // Initialize(ref playerLoop);
         }
 
-        public static void Initialize(ref UnityEngine.LowLevel.PlayerLoopSystem playerLoop)
-        {
-            runners = new PlayerLoopRunner[7];
 
-            var copyList = playerLoop.subSystemList.ToArray();
+        // public static void Initialize(ref UnityEngine.LowLevel.PlayerLoopSystem playerLoop)
+        // {
+        //     runners = new PlayerLoopRunner[7];
 
-            copyList[0].subSystemList = InsertRunner(typeof(UniTaskLoopRunners.UniTaskLoopRunnerInitialization), copyList[0], runners[0] = new PlayerLoopRunner());
-            copyList[1].subSystemList = InsertRunner(typeof(UniTaskLoopRunners.UniTaskLoopRunnerEarlyUpdate), copyList[1], runners[1] = new PlayerLoopRunner());
-            copyList[2].subSystemList = InsertRunner(typeof(UniTaskLoopRunners.UniTaskLoopRunnerFixedUpdate), copyList[2], runners[2] = new PlayerLoopRunner());
-            copyList[3].subSystemList = InsertRunner(typeof(UniTaskLoopRunners.UniTaskLoopRunnerPreUpdate), copyList[3], runners[3] = new PlayerLoopRunner());
-            copyList[4].subSystemList = InsertRunner(typeof(UniTaskLoopRunners.UniTaskLoopRunnerUpdate), copyList[4], runners[4] = new PlayerLoopRunner());
-            copyList[5].subSystemList = InsertRunner(typeof(UniTaskLoopRunners.UniTaskLoopRunnerPreLateUpdate), copyList[5], runners[5] = new PlayerLoopRunner());
-            copyList[6].subSystemList = InsertRunner(typeof(UniTaskLoopRunners.UniTaskLoopRunnerPostLateUpdate), copyList[6], runners[6] = new PlayerLoopRunner());
+        //     var copyList = playerLoop.subSystemList.ToArray();
 
-            playerLoop.subSystemList = copyList;
-            UnityEngine.LowLevel.PlayerLoop.SetPlayerLoop(playerLoop);
-        }
+        //     copyList[0].subSystemList = InsertRunner(typeof(UniTaskLoopRunners.UniTaskLoopRunnerInitialization), copyList[0], runners[0] = new PlayerLoopRunner());
+        //     copyList[1].subSystemList = InsertRunner(typeof(UniTaskLoopRunners.UniTaskLoopRunnerEarlyUpdate), copyList[1], runners[1] = new PlayerLoopRunner());
+        //     copyList[2].subSystemList = InsertRunner(typeof(UniTaskLoopRunners.UniTaskLoopRunnerFixedUpdate), copyList[2], runners[2] = new PlayerLoopRunner());
+        //     copyList[3].subSystemList = InsertRunner(typeof(UniTaskLoopRunners.UniTaskLoopRunnerPreUpdate), copyList[3], runners[3] = new PlayerLoopRunner());
+        //     copyList[4].subSystemList = InsertRunner(typeof(UniTaskLoopRunners.UniTaskLoopRunnerUpdate), copyList[4], runners[4] = new PlayerLoopRunner());
+        //     copyList[5].subSystemList = InsertRunner(typeof(UniTaskLoopRunners.UniTaskLoopRunnerPreLateUpdate), copyList[5], runners[5] = new PlayerLoopRunner());
+        //     copyList[6].subSystemList = InsertRunner(typeof(UniTaskLoopRunners.UniTaskLoopRunnerPostLateUpdate), copyList[6], runners[6] = new PlayerLoopRunner());
+
+        //     playerLoop.subSystemList = copyList;
+        //     UnityEngine.LowLevel.PlayerLoop.SetPlayerLoop(playerLoop);
+        // }
 
 
         public static void AddAction(PlayerLoopTiming timing, IPlayerLoopItem action)
