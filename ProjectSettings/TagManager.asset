@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - TowerBase
+  - TowerRange
+  - EnemyCore
+  - Text_001
+  - Enemy
+  - Spot_001
   layers:
   - Default
   - TransparentFX
@@ -14,7 +19,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Game
   - 
   - 
   - 

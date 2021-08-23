@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TowerRangeController : MonoBehaviour {
 
@@ -11,7 +12,7 @@ public class TowerRangeController : MonoBehaviour {
 
 	void Awake ()
     {
-        m_Width = gameObject.transform.parent.GetComponent<UISprite>().width;
+        //m_Width = gameObject.transform.parent.GetComponent<Image>().width;
         m_Collider = GetComponent<SphereCollider>();
 
         m_Tower = gameObject.transform.parent.GetComponent<Tower>();

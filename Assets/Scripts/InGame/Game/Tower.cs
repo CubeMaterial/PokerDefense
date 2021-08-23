@@ -13,6 +13,8 @@ public class Tower : MonoBehaviour
     public Enemy Target;
 
     private TowerBase m_TowerBase;
+
+    public BoxCollider2D m_Collider;
     private string TowerLevel;
 
 

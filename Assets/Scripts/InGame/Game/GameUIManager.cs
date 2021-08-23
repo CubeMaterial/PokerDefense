@@ -4,10 +4,10 @@ using System.Collections;
 
 public class GameUIManager : Singleton<GameUIManager> {
 
-    public Text GoldLabel;
-    public Text DiaLabel;
+    public Text m_GoldLabel;
+    public Text m_ChpText;
 
-    public UILabel[] TowerLevelLabel;
+    public Text[] TowerLevelLabel;
     public GameObject TowerUI;
     public GameObject[] TowerUIBtn;
 

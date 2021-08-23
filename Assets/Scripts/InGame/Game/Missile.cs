@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Missile : MonoBehaviour {
 
-    public UISprite sprite;
+    public Image m_Image;
 
     public Transform master;
-    public Enemy target;
+    public Enemy m_Target;
 
     private Vector3 dir;
     private bool isAttack = false;
@@ -29,7 +30,7 @@ public class Missile : MonoBehaviour {
     {
         time = 0f;
         isTimeCheck = false;
-        target = enemy;
+        m_Target = enemy;
         Dmg = dmg;
 
         /*switch (type)
@@ -76,7 +77,7 @@ public class Missile : MonoBehaviour {
         if (isAttack == false)
             return;
 
-        if (target == null)
+        if (m_Target == null)
         {
             print("target is null");
             isAttack = false;
@@ -85,7 +86,7 @@ public class Missile : MonoBehaviour {
             return;
         }
 
-        if (target == null && GameManager.instance.GetGameProcessing() == false)
+        if (m_Target == null && GameManager.instance.GetGameProcessing() == false)
         {
             print("target is null. game is not process.");
             isAttack = false;
@@ -94,13 +95,13 @@ public class Missile : MonoBehaviour {
             return;
         }
 
-        if (target == null && GameManager.instance.GetGameProcessing() == true)
+        if (m_Target == null && GameManager.instance.GetGameProcessing() == true)
         {
             enemyPosition = tempPosition;
         }
         else
         {
-            enemyPosition = target.transform.position;
+            enemyPosition = m_Target.transform.position;
         }
 
 
@@ -108,14 +109,14 @@ public class Missile : MonoBehaviour {
 
         distance = Vector2.Distance(enemyPosition, gameObject.transform.position);
 
-        if (target.ReturnEnemyState() != EnemyState.Move && distance <= (Time.deltaTime * attackSpeed * GlobalValue.instance.m_Speed))
+        if (m_Target.ReturnEnemyState() != EnemyState.Move && distance <= (Time.deltaTime * attackSpeed * GlobalValue.instance.m_Speed))
         {
 
             if (tempPosition == transform.position)
             {
                 isAttack = false;
                 tempPosition = Vector2.zero;
-                target = null;
+                m_Target = null;
                 gameObject.SetActive(false);
             }
             else
@@ -129,7 +130,7 @@ public class Missile : MonoBehaviour {
         {
             gameObject.transform.position += dir * Time.deltaTime * attackSpeed * GlobalValue.instance.m_Speed;
 
-            target.transform.position = target.transform.position;
+            //m_Target.transform.position = m_Target.transform.position;
 
             /*if (type != CardType.Card_Type_Boom)
             {

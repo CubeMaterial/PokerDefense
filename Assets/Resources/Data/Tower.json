@@ -57,7 +57,7 @@
 	},
 	"Hammer" : 
 	{
-		"AttackPoint" : 5.0
+		"AttackPoint" : 5.0,
 		"AttackSpeed" : 2.0,
 		"AttackRange" : 3,
 		"Socket" : 3,
