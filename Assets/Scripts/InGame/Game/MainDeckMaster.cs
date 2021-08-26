@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,7 +27,6 @@ public class MainDeckMaster : Singleton<MainDeckMaster>
 
     public void GetCard()
     {
-
         if (m_IsBlock == true)
             return;
 
@@ -60,7 +59,7 @@ public class MainDeckMaster : Singleton<MainDeckMaster>
             {
                 hasACard = true;
                 mHandList.RemoveAt(i);
-            }
+            }   
         }
 
         if (iHandSum > 21)

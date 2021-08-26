@@ -12,7 +12,7 @@ public class DeckMaster : Singleton<DeckMaster> {
 
     public Sprite[] m_SpadeCardSprite;
     public Sprite[] m_CloverCardSprite;
-    public Sprite[] m_HeartardSprite;
+    public Sprite[] m_HeartCardSprite;
     public Sprite[] m_DiamondCardSprite;
 
     private List<int> mTempList;
@@ -122,7 +122,7 @@ public class DeckMaster : Singleton<DeckMaster> {
                 sprite = m_CloverCardSprite[(int)level];
                 break;
             case CardShape.Heart:
-                sprite = m_HeartardSprite[(int)level];
+                sprite = m_HeartCardSprite[(int)level];
                 break;
             case CardShape.Diamond:
                 sprite = m_DiamondCardSprite[(int)level];
