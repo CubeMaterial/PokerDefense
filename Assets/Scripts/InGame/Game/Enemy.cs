@@ -13,11 +13,13 @@ public class Enemy : MonoBehaviour
 
     private float[,] mEnemyStatus;
 
+    public Image[] m_CardImage;
+
+
     private EnemyDebuff m_EnemyDebuff;
     private EnemyBuff m_EnemyBuff;
 
     private int m_iShieldPoint;
-
 
     private int[] mDebuffLevel;
 
@@ -34,9 +36,10 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
-        m_EnemyCardList = new List<Card>();
-        //mDebuffLevel = new int[(int)EnemyDebuff.End];
-        mEnemyStatus = new float[(int)Enemy_Status.End, (int)Status_State.End]; 
+    //     m_EnemyCardList = new List<Card>();
+    //     //mDebuffLevel = new int[(int)EnemyDebuff.End];
+    //     mEnemyStatus = new float[(int)Enemy_Status.End, (int)Status_State.End]; 
+    //     print("mEnemyStatus");
         // Respawn();
     }
 
@@ -44,6 +47,12 @@ public class Enemy : MonoBehaviour
 
     public void Init(Grade grade, List<Card> m_list)
     {
+        if(m_EnemyCardList == null)
+        {
+            m_EnemyCardList = new List<Card>();
+            mEnemyStatus = new float[(int)Enemy_Status.End, (int)Status_State.End]; 
+            print("mEnemyStatus");
+        }
 
         m_EnemyCardList = m_list;
         m_Grade = grade;
@@ -56,6 +65,52 @@ public class Enemy : MonoBehaviour
         m_EnemyState = EnemyState.Ready;
         m_EnemyMoveState = EnemyMoveState.AtPoint0;
 
+        foreach(Image image in m_CardImage)
+        {
+            image.gameObject.SetActive(false);
+        }
+
+
+
+        
+        if(m_EnemyCardList.Count == 5)
+        {
+            m_CardImage[0].transform.localPosition = new Vector3(-40f, 0f, 0f);
+            m_CardImage[1].transform.localPosition = new Vector3(-20f, 0f, 0f);
+            m_CardImage[2].transform.localPosition = new Vector3(0f, 0f, 0f);
+            m_CardImage[3].transform.localPosition = new Vector3(20f, 0f, 0f);
+            m_CardImage[4].transform.localPosition = new Vector3(40f, 0f, 0f);
+        }
+        else if(m_EnemyCardList.Count == 4)
+        {
+            m_CardImage[0].transform.localPosition = new Vector3(-30f, 0f, 0f);
+            m_CardImage[1].transform.localPosition = new Vector3(-10f, 0f, 0f);
+            m_CardImage[2].transform.localPosition = new Vector3(10f, 0f, 0f);
+            m_CardImage[3].transform.localPosition = new Vector3(30f, 0f, 0f);
+        }
+        else if(m_EnemyCardList.Count == 3)
+        {
+            m_CardImage[0].transform.localPosition = new Vector3(-20f, 0f, 0f);
+            m_CardImage[1].transform.localPosition = new Vector3(0f, 0f, 0f);
+            m_CardImage[2].transform.localPosition = new Vector3(20f, 0f, 0f);
+        }
+        else if(m_EnemyCardList.Count == 2)
+        {
+            m_CardImage[0].transform.localPosition = new Vector3(-10f, 0f, 0f);
+            m_CardImage[1].transform.localPosition = new Vector3(10f, 0f, 0f);
+        }
+        else
+        { 
+            m_CardImage[0].transform.localPosition = new Vector3(0f, 0f, 0f);
+
+        }
+
+        for(int i = 0; i < m_EnemyCardList.Count; i++)
+        {
+            m_CardImage[i].sprite = DeckMaster.instance.ReturnCardSprite(m_EnemyCardList[i].ReturnCardShape(), m_EnemyCardList[i].ReturnCardLevel());
+            m_CardImage[i].gameObject.SetActive(true);
+        }
+
         Respawn();
 
     }
@@ -63,6 +118,7 @@ public class Enemy : MonoBehaviour
     private void SetDefaultParameter()
     {
 
+        
         mEnemyStatus[(int)Enemy_Status.Life, (int)Status_State.Origin] =
         mEnemyStatus[(int)Enemy_Status.Life, (int)Status_State.Current] =
         10 * GameDataManager.instance.ReturnCurrentLevel();
@@ -213,7 +269,7 @@ public class Enemy : MonoBehaviour
         gameObject.transform.localPosition = GameManager.instance.MovePoint[0].localPosition;
         gameObject.transform.localEulerAngles = Vector2.zero;
 
-
+        gameObject.SetActive(true);
         m_EnemyState = EnemyState.Move;
 
 
