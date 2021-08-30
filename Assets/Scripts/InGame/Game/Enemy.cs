@@ -51,7 +51,7 @@ public class Enemy : MonoBehaviour
         {
             m_EnemyCardList = new List<Card>();
             mEnemyStatus = new float[(int)Enemy_Status.End, (int)Status_State.End]; 
-            print("mEnemyStatus");
+            // print("mEnemyStatus");
         }
 
         m_EnemyCardList = m_list;
@@ -124,7 +124,7 @@ public class Enemy : MonoBehaviour
         10 * GameDataManager.instance.ReturnCurrentLevel();
 
         mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Origin] =
-        mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current] = 5f;
+        mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current] = 10f;
 
         mEnemyStatus[(int)Enemy_Status.AvoidRate, (int)Status_State.Origin] =
         mEnemyStatus[(int)Enemy_Status.AvoidRate, (int)Status_State.Current] = 0f;
