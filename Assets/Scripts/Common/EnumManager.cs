@@ -72,27 +72,36 @@ public enum EnemyState
 
 public enum EnemyBuff
 {
-    DamageReduceRate = 0x01,
-    DamageReduceFixed = 0x02,
-    MeeleDamageReduceRate = 0x04,
-    MagicDamageReduceRate = 0x08,
+    ResistBurning = 0x0001,
+    ResistPoison = 0x0002,
+    ResistBleeding = 0x0004,
+    ResistAcid = 0x0008,
+    ResistStun = 0x0010,
+    ResistFreezing = 0x0020,
+    ResistSlow = 0x0040,
+    ResistSleep = 0x0080,
+    Barrier = 0x0100,
+    WindShield = 0x0200,
+    HolyShield = 0x0400,
+    MagicBarrier = 0x0800
+    
+}
 
-    Boss = 0x10,
-    End = 0x80
+public enum EnemyBossBuff
+{
+
 }
 
 public enum EnemyDebuff
 {
-    Burn = 0x0001,
-    Ice = 0x0002,
-    Poison = 0x0004,
-    Lightning = 0x0008,
-    Slow = 0x0010,
-    Bleeding = 0x0020,
-    Stun = 0x0040,
+    Burnning = 0x0001,
+    Poison = 0x0002,
+    Bleeding = 0x0004,
+    Acid = 0x0008,
+    Stun = 0x0010,
+    Freezing = 0x0020,
+    Slow = 0x0040,
     Sleep = 0x0080,
-
-    End
 }
 
 public enum EnemyMoveState
@@ -125,27 +134,27 @@ public enum Enemy_Status
     Life,
     Speed,
     AvoidRate,
-    FixedArmor,
-    ReduceArmor,
+    Armor,
+    ReduceDamageRate,
     End
 }
 
 
 public enum CardLevel
 {
-    Two,
-    Three,
-    Four,
-    Five,
-    Six,
-    Seven,
-    Eight,
-    Nine,
-    Ten,
-    J,
-    Q,
-    K,
-    A
+    Two = 0,
+    Three = 1,
+    Four = 2,
+    Five = 3,
+    Six = 4,
+    Seven = 5,
+    Eight = 6,
+    Nine = 7,
+    Ten = 8,
+    J = 9,
+    Q = 10,
+    K = 11,
+    A = 12
 }
 
 public enum CardShape
@@ -187,7 +196,8 @@ public enum Grade
     Straight = 5,
     Flush = 6,
     FullHouse = 7,
-    FourCard = 8
+    FourCard = 8,
+    StraightFlush = 9
   //  R
 }
 

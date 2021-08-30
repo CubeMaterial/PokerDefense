@@ -1,17 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour 
 {
 
-
-    private CardShape mCardShape;
-    private CardLevel mCardLevel;
+    private Grade m_Grade;
+    private List<Card> m_EnemyCardList;
 
     private int iDebuff;
 
     private float[,] mEnemyStatus;
+
+    private EnemyDebuff m_EnemyDebuff;
+    private EnemyBuff m_EnemyBuff;
+
+    private int m_iShieldPoint;
 
 
     private int[] mDebuffLevel;
@@ -25,20 +30,29 @@ public class Enemy : MonoBehaviour
 
     public EnemyMoveState m_EnemyMoveState;
 
+
+
     private void Awake()
     {
-        mDebuffLevel = new int[(int)EnemyDebuff.End];
+        m_EnemyCardList = new List<Card>();
+        //mDebuffLevel = new int[(int)EnemyDebuff.End];
         mEnemyStatus = new float[(int)Enemy_Status.End, (int)Status_State.End]; 
         // Respawn();
     }
 
-    public void Init(CardShape shape, CardLevel level)
+    
+
+    public void Init(Grade grade, List<Card> m_list)
     {
-        mCardShape = shape;
-        mCardLevel = level;
 
+        m_EnemyCardList = m_list;
+        m_Grade = grade;
 
-        SetParameter();
+        SetDefaultParameter();
+        for(int i = 0; i < m_list.Count; i++)
+        {
+            SetParameter(i);
+        }
         m_EnemyState = EnemyState.Ready;
         m_EnemyMoveState = EnemyMoveState.AtPoint0;
 
@@ -46,58 +60,146 @@ public class Enemy : MonoBehaviour
 
     }
 
-    private void SetParameter()
+    private void SetDefaultParameter()
     {
 
         mEnemyStatus[(int)Enemy_Status.Life, (int)Status_State.Origin] =
         mEnemyStatus[(int)Enemy_Status.Life, (int)Status_State.Current] =
-        ((int)mCardLevel + 2) * GameDataManager.instance.ReturnCurrentLevel();
+        10 * GameDataManager.instance.ReturnCurrentLevel();
 
         mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Origin] =
         mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current] = 5f;
 
         mEnemyStatus[(int)Enemy_Status.AvoidRate, (int)Status_State.Origin] =
-        mEnemyStatus[(int)Enemy_Status.AvoidRate, (int)Status_State.Current] = 5f;
+        mEnemyStatus[(int)Enemy_Status.AvoidRate, (int)Status_State.Current] = 0f;
 
-        mEnemyStatus[(int)Enemy_Status.FixedArmor, (int)Status_State.Origin] =
-        mEnemyStatus[(int)Enemy_Status.FixedArmor, (int)Status_State.Current] =
-        GameDataManager.instance.ReturnCurrentLevel() / 10f;
+        mEnemyStatus[(int)Enemy_Status.Armor, (int)Status_State.Origin] =
+        mEnemyStatus[(int)Enemy_Status.Armor, (int)Status_State.Current] = 1;
 
-        mEnemyStatus[(int)Enemy_Status.ReduceArmor, (int)Status_State.Origin] =
-        mEnemyStatus[(int)Enemy_Status.ReduceArmor, (int)Status_State.Current] = 0f;
-
-        if (mCardShape == CardShape.Heart)
-        {
-            mEnemyStatus[(int)Enemy_Status.Life, (int)Status_State.Origin] =
-            mEnemyStatus[(int)Enemy_Status.Life, (int)Status_State.Current] =
-            mEnemyStatus[(int)Enemy_Status.Life, (int)Status_State.Current] * 1.5f;
-        }
-
-
-        if (mCardShape == CardShape.Diamond)
-        {
-            mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Origin] =
-            mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current] = 2f;
-        }
-
-       
-        if (mCardShape == CardShape.Clover)
-        {
-            mEnemyStatus[(int)Enemy_Status.AvoidRate, (int)Status_State.Origin] =
-            mEnemyStatus[(int)Enemy_Status.AvoidRate, (int)Status_State.Current] = 15f;
-        }
-
-        if(mCardShape == CardShape.Spade)
-        {
-            mEnemyStatus[(int)Enemy_Status.FixedArmor, (int)Status_State.Origin] += GameDataManager.instance.ReturnCurrentLevel() * 10f;
-            mEnemyStatus[(int)Enemy_Status.FixedArmor, (int)Status_State.Current] += GameDataManager.instance.ReturnCurrentLevel() * 10f;
-        }
-
-        if(mCardShape == CardShape.Joker)
-        { 
-        
-        }
+        mEnemyStatus[(int)Enemy_Status.ReduceDamageRate, (int)Status_State.Origin] =
+        mEnemyStatus[(int)Enemy_Status.ReduceDamageRate, (int)Status_State.Current] = 0f;
     }
+
+    private void SetParameter(int i)
+    {
+
+        switch(m_EnemyCardList[i].ReturnCardLevel())
+        {
+            case CardLevel.Two:
+            break;    
+            case CardLevel.Three:
+                mEnemyStatus[(int)Enemy_Status.Life, (int)Status_State.Origin] =
+                mEnemyStatus[(int)Enemy_Status.Life, (int)Status_State.Current] =
+                mEnemyStatus[(int)Enemy_Status.Life, (int)Status_State.Origin] * 1.5f;
+            break;
+            case CardLevel.Four:
+                mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Origin] =
+                mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current] =
+                mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Origin] * 1.5f;
+            break;
+            case CardLevel.Five:
+                mEnemyStatus[(int)Enemy_Status.AvoidRate, (int)Status_State.Origin] += 10f;
+                mEnemyStatus[(int)Enemy_Status.AvoidRate, (int)Status_State.Current] += 10f;
+            break;
+            
+            case CardLevel.Six:
+                mEnemyStatus[(int)Enemy_Status.Armor, (int)Status_State.Origin] += (((float)GameDataManager.instance.ReturnCurrentLevel()/10f) + 1f);
+                mEnemyStatus[(int)Enemy_Status.Armor, (int)Status_State.Current] += (((float)GameDataManager.instance.ReturnCurrentLevel()/10f) + 1f);
+            break;
+            case CardLevel.Seven:
+                mEnemyStatus[(int)Enemy_Status.ReduceDamageRate, (int)Status_State.Origin] += (((float)GameDataManager.instance.ReturnCurrentLevel()/5f) + 1f);
+                mEnemyStatus[(int)Enemy_Status.ReduceDamageRate, (int)Status_State.Current] += (((float)GameDataManager.instance.ReturnCurrentLevel()/5f) + 1f);
+            break;
+            case CardLevel.Eight:
+                switch(m_EnemyCardList[i].ReturnCardShape())
+                {
+                    case CardShape.Heart:
+                        m_EnemyBuff |= EnemyBuff.ResistBleeding;
+                    break;
+                    case CardShape.Diamond:
+                        m_EnemyBuff |= EnemyBuff.ResistBurning; 
+                    break;
+                    case CardShape.Clover:
+                        m_EnemyBuff |= EnemyBuff.ResistPoison;
+                    break;
+                    case CardShape.Spade:
+                        m_EnemyBuff |= EnemyBuff.ResistAcid;
+                    break;
+                }
+            break;
+            case CardLevel.Nine:
+              switch(m_EnemyCardList[i].ReturnCardShape())
+                {
+                    case CardShape.Heart:
+                        m_EnemyBuff |= EnemyBuff.ResistSleep;
+                    break;
+                    case CardShape.Diamond:
+                        m_EnemyBuff |= EnemyBuff.ResistFreezing; 
+                    break;
+                    case CardShape.Clover:
+                        m_EnemyBuff |= EnemyBuff.ResistSlow;
+                    break;
+                    case CardShape.Spade:
+                        m_EnemyBuff |= EnemyBuff.ResistStun;
+                    break;
+                }
+            break;
+            case CardLevel.Ten:
+                switch(m_EnemyCardList[i].ReturnCardShape())
+                {
+                    case CardShape.Heart:
+                        m_EnemyBuff |= EnemyBuff.HolyShield;
+                    break;
+                    case CardShape.Diamond:
+                        m_EnemyBuff |= EnemyBuff.WindShield; 
+                    break;
+                    case CardShape.Clover:
+                        m_EnemyBuff |= EnemyBuff.Barrier;
+                    break;
+                    case CardShape.Spade:
+                        m_EnemyBuff |= EnemyBuff.MagicBarrier;
+                    break;
+                }
+            break;
+            case CardLevel.J:
+            break;
+            case CardLevel.Q:
+            break;
+            case CardLevel.K:
+            break;
+            case CardLevel.A:
+
+            break;
+        }
+
+        switch(m_EnemyCardList[i].ReturnCardShape())
+        {
+            case CardShape.Heart:
+                mEnemyStatus[(int)Enemy_Status.Life, (int)Status_State.Origin] =
+                mEnemyStatus[(int)Enemy_Status.Life, (int)Status_State.Current] =
+                mEnemyStatus[(int)Enemy_Status.Life, (int)Status_State.Origin] * 2f;
+            break;    
+            case CardShape.Diamond:
+                mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Origin] =
+                mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current] =
+                mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Origin] * 2.5f;
+            break;
+            case CardShape.Clover:
+                mEnemyStatus[(int)Enemy_Status.AvoidRate, (int)Status_State.Origin] += 15f;
+                mEnemyStatus[(int)Enemy_Status.AvoidRate, (int)Status_State.Current] += 15f;
+            break;
+            case CardShape.Spade:
+                mEnemyStatus[(int)Enemy_Status.Armor, (int)Status_State.Origin] += ((float)m_EnemyCardList[i].ReturnCardLevel()+2f);
+                mEnemyStatus[(int)Enemy_Status.Armor, (int)Status_State.Current] += ((float)m_EnemyCardList[i].ReturnCardLevel()+2f);
+            break;
+            case CardShape.Joker:
+            break;
+        }
+
+        
+    }
+
+
 
     public void SetDebuff(int index, int level)
     {
@@ -141,94 +243,7 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                //print("speed : "+ mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
-
-                // if(Mathf.Abs(gameObject.transform.localPosition.x - GoalPosition.transform.localPosition.x) > mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current])
-                // {
-                //     if( gameObject.transform.localPosition.x > GoalPosition.transform.localPosition.x)
-                //     {
-                //         print("left");
-                //         transform.Translate(-Vector3.right * Time.deltaTime * mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
-                //     }
-                //     // 목표가 우측에 있을때
-                //     else if(gameObject.transform.localPosition.x < GoalPosition.transform.localPosition.x)
-                //     {
-                //         print("right");
-                //         transform.Translate(Vector3.right * Time.deltaTime * mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
-                //     }
-                // }
-                // else if(Mathf.Abs(gameObject.transform.localPosition.y - GoalPosition.transform.localPosition.y) > mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current])
-                // {
-                //     if(gameObject.transform.localPosition.y > GoalPosition.transform.localPosition.y)
-                //     {
-                //         print("down");
-                //         transform.Translate(-Vector3.up * Time.deltaTime * mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
-                //     }
-                //     // 목표가 위에 있을때
-                //     else if(gameObject.transform.localPosition.y < GoalPosition.transform.localPosition.y)
-                //     {
-                //         print("up");
-                //         transform.Translate(Vector3.up * Time.deltaTime * mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
-                //     }
-                // }
-                // else
-                // {
-                //     print("none");
-                // }
-                // gameObject.transform.localPosition = Vector3.Lerp(gameObject.transform.localPosition, GoalPosition.localPosition,0.5f* Time.deltaTime);
                 gameObject.transform.position = Vector3.MoveTowards(transform.position, GoalPosition.position, mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current] * Time.deltaTime);
-
-
-                // 목표가 좌측에 있을때
-                // if( gameObject.transform.localPosition.x > GoalPosition.transform.localPosition.x)
-                // {
-                //     print("left");
-                //     transform.Translate(-Vector3.right * Time.deltaTime * mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
-                // }
-                // // 목표가 우측에 있을때
-                // else if(gameObject.transform.localPosition.x < GoalPosition.transform.localPosition.x)
-                // {
-                //     print("right");
-                //     transform.Translate(Vector3.right * Time.deltaTime * mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
-                // }
-                // // 목표가 아래에 있을때
-                // else if(gameObject.transform.localPosition.y > GoalPosition.transform.localPosition.y)
-                // {
-                //     print("down");
-                //     transform.Translate(-Vector3.up * Time.deltaTime * mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
-                // }
-                // // 목표가 위에 있을때
-                // else if(gameObject.transform.localPosition.y < GoalPosition.transform.localPosition.y)
-                // {
-                //     print("up");
-                //     transform.Translate(Vector3.up * Time.deltaTime * mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
-                // }
-                // else
-                // {
-                //     print("none");
-                // }
-
-                // gameObject.transform.localPosition = Vector3.Lerp(gameObject.transform.localPosition, GoalPosition.localPosition,Time.deltaTime);
-                // if (m_EnemyMoveState == EnemyMoveState.AtPoint1 || m_EnemyMoveState == EnemyMoveState.AtPoint5 || m_EnemyMoveState == EnemyMoveState.AtPoint7)
-                // {
-                //     // down
-                //     gameObject.transform.localPosition = new Vector2(gameObject.transform.localPosition.x, gameObject.transform.localPosition.y - mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
-                // }
-                // else if (m_EnemyMoveState == EnemyMoveState.AtPoint3 || m_EnemyMoveState == EnemyMoveState.AtPoint9)
-                // {
-                //     // up
-                //     gameObject.transform.localPosition = new Vector2(gameObject.transform.localPosition.x, gameObject.transform.localPosition.y + mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current]);
-                // }
-                // else if (m_EnemyMoveState == EnemyMoveState.AtPoint2 || m_EnemyMoveState == EnemyMoveState.AtPoint4 || m_EnemyMoveState == EnemyMoveState.AtPoint8)
-                // {
-                //     // right
-                //     gameObject.transform.localPosition = new Vector2(gameObject.transform.localPosition.x + mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current], gameObject.transform.localPosition.y);
-                // }
-                // else if (m_EnemyMoveState == EnemyMoveState.AtPoint6 || m_EnemyMoveState == EnemyMoveState.AtPoint0)
-                // {
-                //     // left
-                //     gameObject.transform.localPosition = new Vector2(gameObject.transform.localPosition.x - mEnemyStatus[(int)Enemy_Status.Speed, (int)Status_State.Current], gameObject.transform.localPosition.y);
-                // }
             }
             yield return new WaitForEndOfFrame();
         }

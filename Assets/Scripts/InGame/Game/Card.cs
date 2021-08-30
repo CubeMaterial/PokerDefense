@@ -20,6 +20,12 @@ public class Card : MonoBehaviour {
         return m_CardShape;
     }
 
+    public void Init(int shape, CardLevel level)
+    {
+        m_CardShape = (CardShape)shape;
+        m_CardLevel = level;
+    }
+
     public void Init(int shape, int level)
     {
         m_CardShape = (CardShape)shape;

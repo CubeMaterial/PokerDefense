@@ -16,7 +16,7 @@ public class MainDeckMaster : Singleton<MainDeckMaster>
 
     private bool m_IsBlock = false;
 
-     
+    private Card m_NewCard;
 
     private void Awake()
     {
@@ -32,10 +32,12 @@ public class MainDeckMaster : Singleton<MainDeckMaster>
 
         if (GameManager.instance.ReturnCost(DeckType.Main))
         {
-            m_IsBlock = true;
-            mHandList.Add(DeckMaster.instance.DrawMainDeck());
-            CheckHand();
+            // m_IsBlock = true;
+            m_NewCard = DeckMaster.instance.DrawMainDeck();
+            print("newcard Level : " + m_NewCard.ReturnCardLevel() + " / Shape : " + m_NewCard.ReturnCardShape());
+            mHandList.Add(m_NewCard);
             Draw();
+            CheckHand();
         }
         else
         {
@@ -85,13 +87,14 @@ public class MainDeckMaster : Singleton<MainDeckMaster>
 
     private void Draw()
     {
-        m_CardList[mHandList.Count - 1].sprite =
-        DeckMaster.instance.ReturnCardSprite(mHandList[mHandList.Count - 1].ReturnCardShape(), mHandList[mHandList.Count - 1].ReturnCardLevel());
+        
+        m_CardList[mHandList.Count - 1].sprite = DeckMaster.instance.ReturnCardSprite(m_NewCard.ReturnCardShape(), m_NewCard.ReturnCardLevel());
+//        DeckMaster.instance.ReturnCardSprite(mHandList[mHandList.Count - 1].ReturnCardShape(), mHandList[mHandList.Count - 1].ReturnCardLevel());
     }
 
     private void CheckResult()
     { 
-    
+        
     }
 
     public void Apply()

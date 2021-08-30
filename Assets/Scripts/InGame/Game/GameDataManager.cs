@@ -25,7 +25,7 @@ public class GameDataManager : Singleton<GameDataManager>
     {
         gData = new GameData();
         FilePath = Application.persistentDataPath + "/data.g0dzer0";
-
+        iStageLevel = 0;
         //iDeckValue = new int[]
 
         if (File.Exists(FilePath) == false)

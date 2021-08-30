@@ -1,0 +1,187 @@
+{
+	"Wave" : 
+	{
+		"0":
+		{	"Count" : 20,
+			"Mob" : 
+			[
+				{
+					"CardLevel" : "2",
+					"CardShape" : "Random",
+					"Grade" : "Top",
+					"Ratio" : 1
+				}
+			],
+			"Final" : 
+			{
+				"CardLevel" : "2",
+				"CardShape" : "Random",
+				"Grade" : "OnePair"
+			}
+				
+		},
+		"1" : 
+		{	"Count" : 20,
+			"Mob" : 
+			[
+				{
+					"CardLevel" : "3",
+					"CardShape" : "Random",
+					"Grade" : "Top",
+					"Ratio" : 1
+				}
+			],
+			"Final" : 
+			{
+				"CardLevel" : "3",
+				"CardShape" : "Random",
+				"Grade" : "OnePair"
+			}
+				
+		},
+		"2":
+		{	"Count" : 20,
+			"Mob" : 
+			[
+				{
+					"CardLevel" : "4",
+					"CardShape" : "Random",
+					"Grade" : "Top",
+					"Ratio" : 1
+				}
+			],
+			"Final" : 
+			{
+				"CardLevel" : "4",
+				"CardShape" : "Random",
+				"Grade" : "OnePair"
+			}
+				
+		},
+		"3" : 
+		{	"Count" : 20,
+			"Mob" : 
+			[
+				{
+					"CardLevel" : "5",
+					"CardShape" : "Random",
+					"Grade" : "Top",
+					"Ratio" : 1
+				}
+			],
+			"Final" : 
+			{
+				"CardLevel" : "5",
+				"CardShape" : "Random",
+				"Grade" : "OnePair"
+			}
+				
+		},
+		"4":
+		{	"Count" : 20,
+			"Mob" : 
+			[
+				{
+					"CardLevel" : "6",
+					"CardShape" : "Random",
+					"Grade" : "Top",
+					"Ratio" : 1
+				}
+			],
+			"Final" : 
+			{
+				"CardLevel" : "6",
+				"CardShape" : "Random",
+				"Grade" : "OnePair"
+			}
+				
+		},
+		"5" : 
+		{	"Count" : 20,
+			"Mob" : 
+			[
+				{
+					"CardLevel" : "7",
+					"CardShape" : "Random",
+					"Grade" : "Top",
+					"Ratio" : 1
+				}
+			],
+			"Final" : 
+			{
+				"CardLevel" : "7",
+				"CardShape" : "Random",
+				"Grade" : "OnePair"
+			}
+				
+		},
+		"6":
+		{	"Count" : 20,
+			"Mob" : 
+			[
+				{
+					"CardLevel" : "8",
+					"CardShape" : "Random",
+					"Grade" : "Top",
+					"Ratio" : 1
+				}
+			],
+			"Final" : 
+			{
+				"CardLevel" : "8",
+				"CardShape" : "Random",
+				"Grade" : "OnePair"
+			}
+				
+		},
+		"7" : 
+		{	"Count" : 20,
+			"Mob" : 
+			[
+				{
+					"CardLevel" : "9",
+					"CardShape" : "Random",
+					"Grade" : "Top",
+					"Ratio" : 1
+				}
+			],
+			"Final" : 
+			{
+				"CardLevel" : "9",
+				"CardShape" : "Random",
+				"Grade" : "OnePair"
+			}
+				
+		},
+		"8":
+		{	"Count" : 20,
+			"Mob" : 
+			[
+				{
+					"CardLevel" : "10",
+					"CardShape" : "Random",
+					"Grade" : "Top",
+					"Ratio" : 1
+				}
+			],
+			"Final" : 
+			{
+				"CardLevel" : "10",
+				"CardShape" : "Random",
+				"Grade" : "OnePair"
+			}
+				
+		},
+		"9" : 
+		{	"Count" : 1,
+			"Final" : 
+			{
+				"CardLevel" : "J",
+				"CardShape" : "Random",
+				"Grade" : "OnePair"
+			}
+				
+		}
+
+	}
+}
