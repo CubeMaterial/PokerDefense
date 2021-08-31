@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: LastSession
   m_EditorClassIdentifier: 
   nodes:
-  - {fileID: 114885817148476788}
   - {fileID: 114248722416356010}
+  - {fileID: 114885817148476788}
   editorStates:
   - {fileID: 114472815394348124}
   livesInScene: 0
@@ -78,7 +78,7 @@ MonoBehaviour:
   canvas: {fileID: 11400000}
   parentEditor: {fileID: 0}
   drawing: 1
-  selectedNode: {fileID: 114248722416356010}
+  selectedNode: {fileID: 114885817148476788}
   LivePreviewShaderPath: 
   ShaderName: 
   ShaderInMemory: {fileID: 0}
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   body: {fileID: 114248722416356010}
   side: 4
-  sidePosition: 52.7
+  sidePosition: 52.5
   sideOffset: 0
   connection: {fileID: 0}
   typeID: SuperFloat2
@@ -116,7 +116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   body: {fileID: 114248722416356010}
   side: 2
-  sidePosition: 52.7
+  sidePosition: 52.5
   sideOffset: 0
   connections:
   - {fileID: 114029487278921874}
@@ -136,8 +136,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 261.5
-    y: -191
+    x: 272.5
+    y: -221
     width: 260
     height: 400
   nodeKnobs:

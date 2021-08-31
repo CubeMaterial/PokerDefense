@@ -75,18 +75,18 @@ public class Enemy : MonoBehaviour
         
         if(m_EnemyCardList.Count == 5)
         {
-            m_CardImage[0].transform.localPosition = new Vector3(-40f, 0f, 0f);
-            m_CardImage[1].transform.localPosition = new Vector3(-20f, 0f, 0f);
+            m_CardImage[0].transform.localPosition = new Vector3(-26f, 0f, 0f);
+            m_CardImage[1].transform.localPosition = new Vector3(-13f, 0f, 0f);
             m_CardImage[2].transform.localPosition = new Vector3(0f, 0f, 0f);
-            m_CardImage[3].transform.localPosition = new Vector3(20f, 0f, 0f);
-            m_CardImage[4].transform.localPosition = new Vector3(40f, 0f, 0f);
+            m_CardImage[3].transform.localPosition = new Vector3(13f, 0f, 0f);
+            m_CardImage[4].transform.localPosition = new Vector3(26f, 0f, 0f);
         }
         else if(m_EnemyCardList.Count == 4)
         {
-            m_CardImage[0].transform.localPosition = new Vector3(-30f, 0f, 0f);
-            m_CardImage[1].transform.localPosition = new Vector3(-10f, 0f, 0f);
-            m_CardImage[2].transform.localPosition = new Vector3(10f, 0f, 0f);
-            m_CardImage[3].transform.localPosition = new Vector3(30f, 0f, 0f);
+            m_CardImage[0].transform.localPosition = new Vector3(-27f, 0f, 0f);
+            m_CardImage[1].transform.localPosition = new Vector3(-9f, 0f, 0f);
+            m_CardImage[2].transform.localPosition = new Vector3(9f, 0f, 0f);
+            m_CardImage[3].transform.localPosition = new Vector3(27f, 0f, 0f);
         }
         else if(m_EnemyCardList.Count == 3)
         {
@@ -96,8 +96,8 @@ public class Enemy : MonoBehaviour
         }
         else if(m_EnemyCardList.Count == 2)
         {
-            m_CardImage[0].transform.localPosition = new Vector3(-10f, 0f, 0f);
-            m_CardImage[1].transform.localPosition = new Vector3(10f, 0f, 0f);
+            m_CardImage[0].transform.localPosition = new Vector3(-15f, 0f, 0f);
+            m_CardImage[1].transform.localPosition = new Vector3(15f, 0f, 0f);
         }
         else
         { 
