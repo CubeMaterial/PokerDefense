@@ -23,10 +23,15 @@ public class EnemyManager : Singleton<EnemyManager> {
 
 
 
-    private List<int> m_ShapeList;
-    private Grade m_TempGrade;
+    private List<int> m_TempIntList;
+    // private Grade m_TempGrade;
+    private string m_TempGradeIndex;
+
+    private string m_TempIndex;
     private int m_TempCardLevel;
     private int m_TempCardShape;
+
+    private string m_TempEnemyType;
 
     private int iEnemyCount;
 
@@ -36,7 +41,7 @@ public class EnemyManager : Singleton<EnemyManager> {
         m_EnemyList = new List<Enemy>();
         m_EnemyQueue = new Queue<Enemy>();
         m_TempCardList = new List<Card>();
-        m_ShapeList = new List<int>();
+        m_TempIntList = new List<int>();
 
     }
 
@@ -64,11 +69,20 @@ public class EnemyManager : Singleton<EnemyManager> {
 
         while (iEnemyCount > 0)
         {
-            GetData();   
-            yield return new WaitForSeconds(2f);
-//            print("1EnemyCount  " + iEnemyCount);
-            AppearEnemy();
+            if(iEnemyCount == 1)
+            {
+                m_TempEnemyType = "Final";
+            }
+            else
+            {
+                m_TempEnemyType = "Mob"; 
+            }
+            GetData(m_TempEnemyType);   
+            yield return new WaitForSeconds(1f);
+            // AppearEnemy();
             iEnemyCount--;
+            yield return new WaitForSeconds(1f);
+//            print("1EnemyCount  " + iEnemyCount);
         }
     }
 
@@ -105,7 +119,7 @@ public class EnemyManager : Singleton<EnemyManager> {
     private void AppearEnemy()
     {
         m_EnemyList.Add(GetEnemy());
-        m_EnemyList[m_EnemyList.Count -1].Init(m_TempGrade, m_TempCardList);// CardShape.Clover, CardLevel.A);
+        m_EnemyList[m_EnemyList.Count -1].Init((Grade)Enum.Parse(typeof(Grade), m_TempGradeIndex), m_TempCardList);// CardShape.Clover, CardLevel.A);
         m_EnemyList[m_EnemyList.Count -1].gameObject.SetActive(true);
 
 
@@ -123,121 +137,441 @@ public class EnemyManager : Singleton<EnemyManager> {
         
     }
 
-    private void GetData()
+    private void GetData(string enemyType)
     {
-        if(m_Node["Wave"][StageLevel]["Mob"].Count > 1)
+        if(enemyType == "Mob")
         {
-            float[] fRatio = new float[m_Node["Wave"][StageLevel]["Mob"].Count];
-            for(int i = 0; i < fRatio.Length; i++ )
+            if(m_Node["Wave"][StageLevel][enemyType].Count > 1)
             {
-                fRatio[i] = m_Node["Wave"][StageLevel]["Mob"][i]["Ratio"].AsFloat;
-                if(i > 0)
+                float[] fRatio = new float[m_Node["Wave"][StageLevel][enemyType].Count];
+                for(int i = 0; i < fRatio.Length; i++ )
                 {
-                    fRatio[i] += fRatio[i-1];
+                    fRatio[i] = m_Node["Wave"][StageLevel][enemyType][i]["Ratio"].AsFloat;
+                    if(i > 0)
+                    {
+                        fRatio[i] += fRatio[i-1];
+                    }
                 }
+
+                float ran = UnityEngine.Random.Range(0, 100f);
+                for(int i = 0; i < fRatio.Length; i++)
+                {
+                    if(ran <= fRatio[i])
+                    {
+                        m_iSelectModIndex = i;
+                        break;
+                    }
+                }
+                //m_iSelectModIndex = Random.Range(0, m_Node["Wave"][StageLevel]["Mob"].Count -1);
             }
-
-            float ran = UnityEngine.Random.Range(0, 100f);
-
-            for(int i = 0; i < fRatio.Length; i++)
+            else
             {
-                if(ran <= fRatio[i])
-                {
-                    m_iSelectModIndex = i;
-                    break;
-                }
+                m_iSelectModIndex = 0;
             }
-            //m_iSelectModIndex = Random.Range(0, m_Node["Wave"][StageLevel]["Mob"].Count -1);
+            m_TempGradeIndex = m_Node["Wave"][StageLevel][enemyType][m_iSelectModIndex]["Grade"];
+            m_TempIndex = m_Node["Wave"][StageLevel][enemyType][m_iSelectModIndex]["CardLevel"];
         }
         else
-        {
-            m_iSelectModIndex = 0;
+        { 
+            //m_iSelectModIndex = 0;
+            m_TempGradeIndex = m_Node["Wave"][StageLevel]["Final"]["Grade"];
+            m_TempIndex = m_Node["Wave"][StageLevel]["Final"]["CardLevel"];
         }
 
-        string grade = m_Node["Wave"][StageLevel]["Mob"][m_iSelectModIndex]["Grade"];
+
+        print("m_TempGradeIndex : " + m_TempGradeIndex + " / index : " + m_TempIndex);
+
+        // BuildHands();
+        // if((grade == (int)Grade.Straight || grade == (int)Grade.StraightFlush) && index < 6)
+        // {
+        //     print("pumble");
+        // }
+        // else
+        // {
+
+        // }
         // (Enum형식)Enum.Parse(typeof(Enum형식), 문자열);
-        m_TempCardList.Clear();
+       m_TempCardList.Clear();
         Card card;
-        switch((Grade)Enum.Parse(typeof(Grade), grade))
+        switch((Grade)Enum.Parse(typeof(Grade), m_TempGradeIndex))
         {
+            ///////// Top
             case Grade.Top:
-            m_TempGrade = Grade.Top;
+            // m_TempGrade = Grade.Top;
             card = new Card();
             m_TempCardShape = UnityEngine.Random.Range(0,4);
             
-            card.Init(m_TempCardShape,ReturnLevel(m_Node["Wave"][StageLevel]["Mob"][m_iSelectModIndex]["CardLevel"]));
+            card.Init(m_TempCardShape,ReturnLevel(m_TempIndex));
             
             m_TempCardList.Add(card);
+
+            print("shape : " +m_TempCardList[m_TempCardList.Count -1].ReturnCardShape() + " / level : " + m_TempCardList[m_TempCardList.Count -1].ReturnCardLevel() );
             break;
-
-
+            ///////// OnePair
             case Grade.OnePair:
-            m_TempGrade = Grade.OnePair;
+            // m_TempGrade = Grade.OnePair;
             InPutShape();
 
             for(int i = 0; i < 2; i++)
             {
                 card = new Card();
-                m_TempCardShape = m_ShapeList[UnityEngine.Random.Range(0,m_ShapeList.Count)]; 
-                card.Init(m_TempCardShape, ReturnLevel(m_Node["Wave"][StageLevel]["Mob"][m_iSelectModIndex]["CardLevel"]));
+                m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)]; 
+                card.Init(m_TempCardShape, ReturnLevel(m_TempIndex));
                 m_TempCardList.Add(card);
-                m_ShapeList.RemoveAt(m_TempCardShape);
+                m_TempIntList.RemoveAt(m_TempCardShape);
             }
+            m_TempCardList = GameManager.instance.ReturnSortList(m_TempCardList);
             break;
-
+            ///////// TwoPair
             case Grade.TwoPair:
-            m_TempGrade = Grade.TwoPair;
+            // m_TempGrade = Grade.TwoPair;
             InPutShape();
+            for(int i = 0; i < 2; i++)
+            {
+                card = new Card();
+                m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)]; 
+                card.Init(m_TempCardShape, ReturnLevel(m_TempIndex));
+                m_TempCardList.Add(card);
+                m_TempIntList.RemoveAt(m_TempCardShape);
+            }
+
+            InPutLevel(int.Parse(m_TempIndex));
+            m_TempCardLevel = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)];
+
+            InPutShape();
+            for(int i = 0; i < 2; i++)
+            {
+                card = new Card();
+                m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)]; 
+                card.Init(m_TempCardShape, ReturnLevel(m_TempCardLevel.ToString()));
+                m_TempCardList.Add(card);
+                m_TempIntList.RemoveAt(m_TempCardShape);
+            }
+            m_TempCardList = GameManager.instance.ReturnSortList(m_TempCardList);
+            
             break;
+            ///////// Triple
             case Grade.Triple:
-            m_TempGrade = Grade.Triple;
+            // m_TempGrade = Grade.Triple;
             InPutShape();
             for(int i = 0; i < 3; i++)
             {
                 card = new Card();
-                m_TempCardShape = m_ShapeList[UnityEngine.Random.Range(0,m_ShapeList.Count)]; 
-                card.Init(m_TempCardShape, ReturnLevel(m_Node["Wave"][StageLevel]["Mob"][m_iSelectModIndex]["CardLevel"]));
+                m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)]; 
+                card.Init(m_TempCardShape, ReturnLevel(m_TempIndex));
                 m_TempCardList.Add(card);
-                m_ShapeList.RemoveAt(m_TempCardShape);
+                m_TempIntList.RemoveAt(m_TempCardShape);
             }
             break;
+            ///////// Straight
             case Grade.Straight:
-            m_TempGrade = Grade.Straight;
+            // m_TempGrade = Grade.Straight;
+            for(int i = 0; i < 5; i++)
+            {
+                card = new Card();
+                m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,4)]; 
+                card.Init(m_TempCardShape, ReturnLevel((int.Parse(m_TempIndex) - i).ToString()));
+                m_TempCardList.Add(card);
+            }
+
+            int[] arr = new int[4];
+            for(int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = 0;
+            }
+            for(int i = 0; i < m_TempCardList.Count; i++)
+            {
+                arr[(int)(m_TempCardList[i].ReturnCardShape())]++;
+            }
+
+            for(int i = 0; i < arr.Length; i++)
+            {
+                if(arr[i] == 5)
+                {
+                    m_TempCardList.RemoveAt(m_TempCardList.Count -1);
+                    GetData(m_TempEnemyType);
+                    break;
+                }
+            }
+            m_TempCardList = GameManager.instance.ReturnSortList(m_TempCardList);
             
             break;
+            ///////// Flush
             case Grade.Flush:
-            m_TempGrade = Grade.Flush;
+            // m_TempGrade = Grade.Flush;
+            InPutLevel(int.Parse(m_TempIndex));
+            m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,4)];
+            for(int i = 0; i < 5; i++)
+            {
+                card = new Card();
+                m_TempCardLevel = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)]; 
+                card.Init(m_TempCardShape, m_TempCardLevel);
+                m_TempCardList.Add(card);
+                m_TempIntList.RemoveAt(m_TempCardLevel);
+            }
+            m_TempCardList = GameManager.instance.ReturnSortList(m_TempCardList);
+
             
             break;
+            ///////// FullHouse
             case Grade.FullHouse:
-            m_TempGrade = Grade.FullHouse;
+            // m_TempGrade = Grade.FullHouse;
             
+            InPutShape();
+            for(int i = 0; i < 3; i++)
+            {
+                card = new Card();
+                m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)]; 
+                card.Init(m_TempCardShape, ReturnLevel(m_TempIndex));
+                m_TempCardList.Add(card);
+                m_TempIntList.RemoveAt(m_TempCardShape);
+            }
+
+            InPutLevel(int.Parse(m_TempIndex));
+            m_TempCardLevel = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)];
+
+            InPutShape();
+            for(int i = 0; i < 2; i++)
+            {
+                card = new Card();
+                m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)]; 
+                card.Init(m_TempCardShape, ReturnLevel(m_TempCardLevel.ToString()));
+                m_TempCardList.Add(card);
+                m_TempIntList.RemoveAt(m_TempCardShape);
+            }
+            m_TempCardList = GameManager.instance.ReturnSortList(m_TempCardList);
             break;
-            
+            ///////// FourCard
             case Grade.FourCard:
-            m_TempGrade = Grade.FourCard;
+            // m_TempGrade = Grade.FourCard;
             for(int i = 0; i < 4; i++)
             {
                 card = new Card();
                 m_TempCardShape = i;
-                card.Init(m_TempCardShape, ReturnLevel(m_Node["Wave"][StageLevel]["Mob"][m_iSelectModIndex]["CardLevel"]));
+                card.Init(m_TempCardShape, ReturnLevel(m_TempIndex));
                 m_TempCardList.Add(card);
             }
+            m_TempCardList = GameManager.instance.ReturnSortList(m_TempCardList);
             break;
+            ///////// StraightFlush
             case Grade.StraightFlush:
-            m_TempGrade = Grade.StraightFlush;
+            // m_TempGrade = Grade.StraightFlush;
+            m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,4)]; 
             
+            for(int i = 0; i < 5; i++)
+            {
+                card = new Card();
+                card.Init(m_TempCardShape, ReturnLevel((int.Parse(m_TempIndex) - i).ToString()));
+                m_TempCardList.Add(card);
+            }
+            m_TempCardList = GameManager.instance.ReturnSortList(m_TempCardList);// .Sort();
             break;
 
         }
 
+        //appear
+         m_EnemyList.Add(GetEnemy());
+         print("m_TempGradeIndex : " + m_TempGradeIndex + " / list" + m_TempCardList.Count);
+        m_EnemyList[m_EnemyList.Count -1].Init((Grade)Enum.Parse(typeof(Grade), m_TempGradeIndex), m_TempCardList);// CardShape.Clover, CardLevel.A);
+        m_EnemyList[m_EnemyList.Count -1].gameObject.SetActive(true);
+    }
+
+    private void BuildHands()
+    {
+        // m_TempCardList.Clear();
+        // Card card;
+        // switch((Grade)Enum.Parse(typeof(Grade), m_TempGradeIndex))
+        // {
+        //     ///////// Top
+        //     case Grade.Top:
+        //     // m_TempGrade = Grade.Top;
+        //     card = new Card();
+        //     m_TempCardShape = UnityEngine.Random.Range(0,4);
+            
+        //     card.Init(m_TempCardShape,ReturnLevel(m_TempIndex));
+            
+        //     m_TempCardList.Add(card);
+
+        //     print("shape : " +m_TempCardList[m_TempCardList.Count -1].ReturnCardShape() + " / level : " + m_TempCardList[m_TempCardList.Count -1].ReturnCardLevel() );
+        //     break;
+        //     ///////// OnePair
+        //     case Grade.OnePair:
+        //     // m_TempGrade = Grade.OnePair;
+        //     InPutShape();
+
+        //     for(int i = 0; i < 2; i++)
+        //     {
+        //         card = new Card();
+        //         m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)]; 
+        //         card.Init(m_TempCardShape, ReturnLevel(m_TempIndex));
+        //         m_TempCardList.Add(card);
+        //         m_TempIntList.RemoveAt(m_TempCardShape);
+        //     }
+        //     m_TempCardList = GameManager.instance.ReturnSortList(m_TempCardList);
+        //     break;
+        //     ///////// TwoPair
+        //     case Grade.TwoPair:
+        //     // m_TempGrade = Grade.TwoPair;
+        //     InPutShape();
+        //     for(int i = 0; i < 2; i++)
+        //     {
+        //         card = new Card();
+        //         m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)]; 
+        //         card.Init(m_TempCardShape, ReturnLevel(m_TempIndex));
+        //         m_TempCardList.Add(card);
+        //         m_TempIntList.RemoveAt(m_TempCardShape);
+        //     }
+
+        //     InPutLevel(int.Parse(m_TempIndex));
+        //     m_TempCardLevel = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)];
+
+        //     InPutShape();
+        //     for(int i = 0; i < 2; i++)
+        //     {
+        //         card = new Card();
+        //         m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)]; 
+        //         card.Init(m_TempCardShape, ReturnLevel(m_TempCardLevel.ToString()));
+        //         m_TempCardList.Add(card);
+        //         m_TempIntList.RemoveAt(m_TempCardShape);
+        //     }
+        //     m_TempCardList = GameManager.instance.ReturnSortList(m_TempCardList);
+            
+        //     break;
+        //     ///////// Triple
+        //     case Grade.Triple:
+        //     // m_TempGrade = Grade.Triple;
+        //     InPutShape();
+        //     for(int i = 0; i < 3; i++)
+        //     {
+        //         card = new Card();
+        //         m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)]; 
+        //         card.Init(m_TempCardShape, ReturnLevel(m_TempIndex));
+        //         m_TempCardList.Add(card);
+        //         m_TempIntList.RemoveAt(m_TempCardShape);
+        //     }
+        //     break;
+        //     ///////// Straight
+        //     case Grade.Straight:
+        //     // m_TempGrade = Grade.Straight;
+        //     for(int i = 0; i < 5; i++)
+        //     {
+        //         card = new Card();
+        //         m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,4)]; 
+        //         card.Init(m_TempCardShape, ReturnLevel((int.Parse(m_TempIndex) - i).ToString()));
+        //         m_TempCardList.Add(card);
+        //     }
+
+        //     int[] arr = new int[4];
+        //     for(int i = 0; i < arr.Length; i++)
+        //     {
+        //         arr[i] = 0;
+        //     }
+        //     for(int i = 0; i < m_TempCardList.Count; i++)
+        //     {
+        //         arr[(int)(m_TempCardList[i].ReturnCardShape())]++;
+        //     }
+
+        //     for(int i = 0; i < arr.Length; i++)
+        //     {
+        //         if(arr[i] == 5)
+        //         {
+        //             m_TempCardList.RemoveAt(m_TempCardList.Count -1);
+        //             GetData(m_TempEnemyType);
+        //             break;
+        //         }
+        //     }
+        //     m_TempCardList = GameManager.instance.ReturnSortList(m_TempCardList);
+            
+        //     break;
+        //     ///////// Flush
+        //     case Grade.Flush:
+        //     // m_TempGrade = Grade.Flush;
+        //     InPutLevel(int.Parse(m_TempIndex));
+        //     m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,4)];
+        //     for(int i = 0; i < 5; i++)
+        //     {
+        //         card = new Card();
+        //         m_TempCardLevel = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)]; 
+        //         card.Init(m_TempCardShape, m_TempCardLevel);
+        //         m_TempCardList.Add(card);
+        //         m_TempIntList.RemoveAt(m_TempCardLevel);
+        //     }
+        //     m_TempCardList = GameManager.instance.ReturnSortList(m_TempCardList);
+
+            
+        //     break;
+        //     ///////// FullHouse
+        //     case Grade.FullHouse:
+        //     // m_TempGrade = Grade.FullHouse;
+            
+        //     InPutShape();
+        //     for(int i = 0; i < 3; i++)
+        //     {
+        //         card = new Card();
+        //         m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)]; 
+        //         card.Init(m_TempCardShape, ReturnLevel(m_TempIndex));
+        //         m_TempCardList.Add(card);
+        //         m_TempIntList.RemoveAt(m_TempCardShape);
+        //     }
+
+        //     InPutLevel(int.Parse(m_TempIndex));
+        //     m_TempCardLevel = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)];
+
+        //     InPutShape();
+        //     for(int i = 0; i < 2; i++)
+        //     {
+        //         card = new Card();
+        //         m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,m_TempIntList.Count)]; 
+        //         card.Init(m_TempCardShape, ReturnLevel(m_TempCardLevel.ToString()));
+        //         m_TempCardList.Add(card);
+        //         m_TempIntList.RemoveAt(m_TempCardShape);
+        //     }
+        //     m_TempCardList = GameManager.instance.ReturnSortList(m_TempCardList);
+        //     break;
+        //     ///////// FourCard
+        //     case Grade.FourCard:
+        //     // m_TempGrade = Grade.FourCard;
+        //     for(int i = 0; i < 4; i++)
+        //     {
+        //         card = new Card();
+        //         m_TempCardShape = i;
+        //         card.Init(m_TempCardShape, ReturnLevel(m_TempIndex));
+        //         m_TempCardList.Add(card);
+        //     }
+        //     m_TempCardList = GameManager.instance.ReturnSortList(m_TempCardList);
+        //     break;
+        //     ///////// StraightFlush
+        //     case Grade.StraightFlush:
+        //     // m_TempGrade = Grade.StraightFlush;
+        //     m_TempCardShape = m_TempIntList[UnityEngine.Random.Range(0,4)]; 
+            
+        //     for(int i = 0; i < 5; i++)
+        //     {
+        //         card = new Card();
+        //         card.Init(m_TempCardShape, ReturnLevel((int.Parse(m_TempIndex) - i).ToString()));
+        //         m_TempCardList.Add(card);
+        //     }
+        //     m_TempCardList = GameManager.instance.ReturnSortList(m_TempCardList);// .Sort();
+        //     break;
+
+        // }
     }
 
     public void InPutShape()
     {
+        m_TempIntList.Clear();
         for(int i = 0; i < 4; i++)
         {
-            m_ShapeList.Add(i);
+            m_TempIntList.Add(i);
+        }
+    }
+
+    public void InPutLevel(int k = 0)
+    {
+        m_TempIntList.Clear();
+        for(int i = 0; i < 13 - k; i++)
+        {
+            m_TempIntList.Add(i);
         }
     }
 
@@ -245,13 +579,13 @@ public class EnemyManager : Singleton<EnemyManager> {
     {
         CardLevel level = CardLevel.Two;
 
-        if(int.TryParse(m_Node["Wave"][StageLevel]["Mob"][m_iSelectModIndex]["CardLevel"], out int t))
+        if(int.TryParse(str, out int t))
         {
-            level = (CardLevel)(t -2);
+            level = (CardLevel)(t - 2);
         }
         else
         {
-            switch (m_Node["Wave"][StageLevel]["Mob"][m_iSelectModIndex]["CardLevel"])
+            switch (str)
             {
                 case "J":
                 level = CardLevel.J;

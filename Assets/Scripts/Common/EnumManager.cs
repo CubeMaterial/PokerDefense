@@ -189,15 +189,15 @@ public enum ChipType
 
 public enum Grade
 { 
-    Top = 1,
-    OnePair = 2,
-    TwoPair = 3,
-    Triple = 4,
-    Straight = 5,
-    Flush = 6,
-    FullHouse = 7,
-    FourCard = 8,
-    StraightFlush = 9
+    Top = 0,
+    OnePair = 1,
+    TwoPair = 2,
+    Triple = 3,
+    Straight = 4,
+    Flush = 5,
+    FullHouse = 6,
+    FourCard = 7,
+    StraightFlush = 8
   //  R
 }
 

@@ -46,15 +46,31 @@ public class SubDeckMaster : Singleton<SubDeckMaster>
         //mHandList.Add(card5);
         //mHandList.Add(card6);
 
-        for (int i = 0; i < 7; i++)
-        {
-            mHandList.Add(DeckMaster.instance.DrawSubDeck());
-            m_CardList[i].sprite = DeckMaster.instance.ReturnCardSprite(mHandList[i].ReturnCardShape(), mHandList[i].ReturnCardLevel());
-        }
+        // for (int i = 0; i < 7; i++)
+        // {
+        //     mHandList.Add(DeckMaster.instance.DrawSubDeck());
+        //     m_CardList[i].sprite = DeckMaster.instance.ReturnCardSprite(mHandList[i].ReturnCardShape(), mHandList[i].ReturnCardLevel());
+        // }
+        DrawCard();
         //mSelectCardList=mHandList;
 
          iGrade = GameManager.instance.ReturnGrade(mHandList);// CheckHand();
-         print("grade : " + (Grade)iGrade);
+        //  print("grade : " + (Grade)iGrade);
+    }
+
+    public void DrawCard()
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            mHandList.Add(DeckMaster.instance.DrawSubDeck());
+            // print("b /// i : " + i + " / shape : " + mHandList[i].ReturnCardShape() + " / level : " + mHandList[i].ReturnCardLevel());
+        }
+        mHandList = GameManager.instance.ReturnSortList(mHandList);//.Sort();
+        for (int i = 0; i < 7; i++)
+        {
+            m_CardList[i].sprite = DeckMaster.instance.ReturnCardSprite(mHandList[i].ReturnCardShape(), mHandList[i].ReturnCardLevel());
+            // print("a /// i : " + i + " / shape : " + mHandList[i].ReturnCardShape() + " / level : " + mHandList[i].ReturnCardLevel());
+        }
     }
 
     public void GetCard()

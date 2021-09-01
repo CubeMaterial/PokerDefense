@@ -41,6 +41,7 @@ public class Enemy : MonoBehaviour
     //     mEnemyStatus = new float[(int)Enemy_Status.End, (int)Status_State.End]; 
     //     print("mEnemyStatus");
         // Respawn();
+
     }
 
     
@@ -55,6 +56,8 @@ public class Enemy : MonoBehaviour
         }
 
         m_EnemyCardList = m_list;
+        //m_EnemyCardList = GameManager.instance.ReturnSortList(m_EnemyCardList);
+
         m_Grade = grade;
 
         SetDefaultParameter();
@@ -69,9 +72,6 @@ public class Enemy : MonoBehaviour
         {
             image.gameObject.SetActive(false);
         }
-
-
-
         
         if(m_EnemyCardList.Count == 5)
         {

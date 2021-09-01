@@ -165,6 +165,45 @@ public class GameManager : Singleton<GameManager>
         Debug.Log(log);
     }
 
+    public List<Card> ReturnSortList(List<Card> mList)
+    {
+        mList.Sort(delegate(Card a, Card b)
+        {
+            if (a.ReturnCardLevel() > b.ReturnCardLevel())
+            {
+                return 1; 
+            }
+
+            else if (a.ReturnCardLevel() < b.ReturnCardLevel())
+            {
+                return -1; 
+            }
+            else
+            {
+                return 0;
+            }
+        });
+
+        // mList.Sort(delegate(Card a, Card b)
+        // {
+        //     if (a.ReturnCardShape() > b.ReturnCardShape())
+        //     {
+        //         return 1; 
+        //     }
+
+        //     else if (a.ReturnCardShape() < b.ReturnCardShape())
+        //     {
+        //         return -1; 
+        //     }
+        //     else
+        //     {
+        //         return 0;
+        //     }
+        // });
+
+        return mList;
+    }
+
     public int ReturnGrade(List<Card> mList)
     {
         int iGrade = 0;

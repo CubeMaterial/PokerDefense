@@ -16,7 +16,7 @@ public class SubCardSelector : MonoBehaviour
     }
    
 
-
+    
 
     public void SelectCard()
     {

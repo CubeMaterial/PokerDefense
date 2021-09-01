@@ -23,7 +23,7 @@ public class GameDataManager : Singleton<GameDataManager>
 
     private void Awake()
     {
-        gData = new GameData();
+        //gData = new GameData();
         FilePath = Application.persistentDataPath + "/data.g0dzer0";
         iStageLevel = 0;
         //iDeckValue = new int[]
